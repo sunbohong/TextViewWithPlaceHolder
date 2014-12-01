@@ -32,13 +32,6 @@ class SunTextViewWithPlaceHolder: UITextView {
     
     
     override func layoutSubviews() ->Void {
-        //下面的判断可以在通过代码修改text时，移除placeHolderLabel
-        if self.isFirstResponder() || (self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
-            placeHolderLabel.removeFromSuperview()
-        }
-        else {
-            self.addSubview(placeHolderLabel)
-        }
         
         placeHolderLabel.sizeToFit()
         
@@ -63,8 +56,26 @@ class SunTextViewWithPlaceHolder: UITextView {
         de.addObserver(self, selector: "editDidBegin:", name: UITextViewTextDidBeginEditingNotification, object: self)
         
         de.addObserver(self, selector: "editDidEnd:", name: UITextViewTextDidEndEditingNotification, object: self)
+        
+        self.addObserver(self, forKeyPath: "text", options:NSKeyValueObservingOptions.New, context: nil)
     }
     
+    deinit{
+        self.removeObserver(self, forKeyPath: "text")
+    }
+    
+    //通过代码修改text时，判断是否需要移除placeHolderLabel
+      override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if keyPath == "text"
+        {
+            if  self.isFirstResponder() || (self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+                placeHolderLabel.removeFromSuperview()
+            }
+            else {
+                self.addSubview(placeHolderLabel)
+            }
+        }
+    }
     //通知事件
     func textDidChange(notification:NSNotification) -> Void {
         placeHolderLabel.removeFromSuperview()
