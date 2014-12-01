@@ -33,7 +33,7 @@ class SunTextViewWithPlaceHolder: UITextView {
     
     override func layoutSubviews() ->Void {
         //下面的判断可以在通过代码修改text时，移除placeHolderLabel
-        if (self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+        if self.isFirstResponder() || (self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
             placeHolderLabel.removeFromSuperview()
         }
         else {
