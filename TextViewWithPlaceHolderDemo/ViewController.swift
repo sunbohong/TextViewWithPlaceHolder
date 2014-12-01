@@ -10,9 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet var textViewWithPlaceHolder: SunTextViewWithPlaceHolder!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+ 
+        textViewWithPlaceHolder.attributedPlaceholder = NSAttributedString(string: "attributedPlaceholder", attributes: [NSFontAttributeName:UIFont.systemFontOfSize(22), NSForegroundColorAttributeName: UIColor.orangeColor()])
+       textViewWithPlaceHolder.text=""
     }
 
     override func didReceiveMemoryWarning() {
